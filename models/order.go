@@ -5,11 +5,11 @@ import "github.com/jinzhu/gorm"
 // Order ...
 type Order struct {
 	gorm.Model
-	UserID    int64
+	UserID    uint
 	User      User
-	Symbol    string
-	FundID    int64
+	FundID    uint
 	Fund      Fund
+	Symbol    string
 	OrderType string  // market or limit
 	Side      string  // Sell Buy
 	Volume    float64 `json:"volume" sql:"DECIMAL(32,16)"`

@@ -7,9 +7,9 @@ import (
 // Withdraw ...
 type Withdraw struct {
 	gorm.Model
-	AccountID  int64
+	AccountID  uint
 	Account    Account
-	CurrencyID int64
+	CurrencyID uint
 	Currency   Currency
 	Amount     float64 `json:"amount" sql:"DECIMAL(32,16)"`
 	Fee        float64 `json:"fee" sql:"DECIMAL(32,16)"`

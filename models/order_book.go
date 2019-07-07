@@ -7,13 +7,13 @@ import (
 // OrderBook ...
 type OrderBook struct {
 	gorm.Model
-	UserID    int64
+	UserID    uint `json:"user_id"`
 	User      User
-	Symbol    string
-	FundID    int64
+	Symbol    string `json:"symbol"`
+	FundID    uint   `json:"fund_id"`
 	Fund      Fund
-	OrderType string  // market or limit
-	Side      string  // Sell Buy
+	OrderType string  `json:"order_type"` // market or limit
+	Side      string  `json:"side"`       // Sell Buy
 	Volume    float64 `json:"volume" sql:"DECIMAL(32,16)"`
 	Price     float64 `json:"price" sql:"DECIMAL(32,16)"`
 }

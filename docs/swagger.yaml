@@ -1,0 +1,179 @@
+basePath: '{{.BasePath}}'
+definitions:
+  models.Currency:
+    properties:
+      deposit_fee:
+        type: number
+      symbol:
+        type: string
+      withdraw_fee:
+        type: number
+    type: object
+  models.Fund:
+    properties:
+      leftCurrency:
+        $ref: '#/definitions/models.Currency'
+        type: object
+      leftCurrencyID:
+        type: integer
+      limit_rate:
+        type: number
+      market_rate:
+        type: number
+      name:
+        type: string
+      rightCurrency:
+        $ref: '#/definitions/models.Currency'
+        type: object
+      rightCurrencyID:
+        type: integer
+      symbol:
+        description: eg btc_usd eth_usd
+        type: string
+    type: object
+  models.OrderBook:
+    properties:
+      fund:
+        $ref: '#/definitions/models.Fund'
+        type: object
+      fund_id:
+        type: integer
+      order_type:
+        description: market or limit
+        type: string
+      price:
+        type: number
+      side:
+        description: Sell Buy
+        type: string
+      symbol:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+        type: object
+      user_id:
+        type: integer
+      volume:
+        type: number
+    type: object
+  models.User:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+    type: object
+  utils.APIRes:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Exchange server API 1.0 swagger doc
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Exchange server API
+  version: "1.0"
+paths:
+  /order_books:
+    get:
+      consumes:
+      - application/json
+      description: get your order book list
+      parameters:
+      - description: eg BTC_USD
+        in: query
+        name: symbol
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.OrderBook'
+            type: array
+      summary: order book list
+    post:
+      consumes:
+      - application/json
+      description: create an order book
+      parameters:
+      - description: order book model
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderBook'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrderBook'
+            type: object
+      summary: new an order book
+  /order_books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: cancel an exist order book
+      parameters:
+      - description: eg 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIRes'
+            type: object
+      summary: cancel an order book
+    put:
+      consumes:
+      - application/json
+      description: update an exist order book
+      parameters:
+      - description: eg 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: order book model
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderBook'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.OrderBook'
+            type: object
+      summary: update an order book
+swagger: "2.0"
