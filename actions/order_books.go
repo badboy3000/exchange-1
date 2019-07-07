@@ -1,10 +1,12 @@
 package actions
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/FlowerWrong/exchange/db"
 	"github.com/FlowerWrong/exchange/models"
+	"github.com/FlowerWrong/exchange/services"
 	"github.com/FlowerWrong/exchange/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -47,19 +49,25 @@ func OrderBookCreate(c *gin.Context) {
 	}
 	orderBook.UserID = 1 // FIXME
 
-	// 相同品种，相同价格得单合并
-	var orderBookExist models.OrderBook
-	result := db.ORM().Where("symbol = ? and price = ?", orderBook.Symbol, orderBook.Price).First(&orderBookExist)
-	if result.RecordNotFound() {
-		var fund models.Fund
-		db.ORM().Where("symbol = ?", orderBook.Symbol).First(&fund)
-		orderBook.FundID = fund.ID
-		db.ORM().Create(&orderBook)
-	} else {
-		orderBookExist.Volume = orderBookExist.Volume + orderBook.Volume
-		db.ORM().Save(&orderBookExist)
-		orderBook = orderBookExist
+	// 相同品种，相同价格得单不合并
+
+	var fund models.Fund
+	db.ORM().Where("symbol = ?", orderBook.Symbol).First(&fund)
+	orderBook.FundID = fund.ID
+	db.ORM().Create(&orderBook)
+
+	// 发送给queue
+	b, err := json.Marshal(orderBook)
+	if err != nil {
+		panic(err)
 	}
+	raw := json.RawMessage(b)
+	event := &services.Event{Name: "create_order_book", Data: raw}
+	data, err := json.Marshal(event)
+	if err != nil {
+		panic(err)
+	}
+	db.Redis().RPush("trades_queue", string(data))
 
 	c.JSON(http.StatusOK, orderBook)
 }
@@ -81,11 +89,16 @@ func OrderBookUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// do not update here
 	var orderBook models.OrderBook
 	db.ORM().Where("id = ? and volume > 0", id).First(&orderBook)
 	orderBook.Volume = orderBookUpdate.Volume
 	orderBook.Price = orderBookUpdate.Price
 	db.ORM().Save(&orderBook)
+
+	// 发送给queue
+
 	c.JSON(http.StatusOK, orderBook)
 }
 
@@ -100,7 +113,11 @@ func OrderBookUpdate(c *gin.Context) {
 // @Router /order_books/{id} [delete]
 func OrderBookCancel(c *gin.Context) {
 	id := c.Param("id")
+	// do not update here
 	var orderBook models.OrderBook
 	db.ORM().Where("id = ?", id).First(&orderBook).Delete(&orderBook)
-	c.JSON(http.StatusOK, utils.APIRes{0, "ok"})
+
+	// 发送给queue
+
+	c.JSON(http.StatusOK, utils.APIRes{Code: 0, Message: "ok"})
 }

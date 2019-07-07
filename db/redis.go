@@ -12,7 +12,7 @@ var (
 )
 
 func initRedisClient() error {
-	redisOptions, err := redis.ParseURL("redis://:@localhost:6379/0")
+	redisOptions, err := redis.ParseURL("redis://:@localhost:6379/1")
 	redisClient = redis.NewClient(redisOptions)
 
 	_, err = redisClient.Ping().Result()
