@@ -5,8 +5,8 @@ import "github.com/jinzhu/gorm"
 // Deposit ...
 type Deposit struct {
 	gorm.Model
-	UserID     int64
-	User       User
+	AccountID  int64
+	Account    Account
 	CurrencyID int64
 	Currency   Currency
 	Amount     float64 `json:"amount" sql:"DECIMAL(32,16)"`

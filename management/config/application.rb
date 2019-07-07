@@ -32,21 +32,34 @@ module Management
     config.generators do |g|
       g.orm :active_record
       g.template_engine nil
-      g.test_framework :rspec,
-        view_specs: false,
-        helper_specs: true,
-        routing_specs: false,
-        controller_specs: false,
-        model_specs: true,
-        request_specs: true,
-        mailer_specs: true,
-        job_spec: true,
-        system_specs: true
-      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+      # g.test_framework :rspec,
+      #   view_specs: false,
+      #   helper_specs: false,
+      #   routing_specs: false,
+      #   controller_specs: false,
+      #   model_specs: false,
+      #   request_specs: true,
+      #   mailer_specs: false,
+      #   job_spec: false,
+      #   system_specs: false
+      # g.fixture_replacement :factory_bot, dir: 'spec/factories'
+      g.test_framework nil
+      g.controller_specs false
+      g.request_specs false
+      g.job_specs false
+      g.helper_specs false
+      g.feature_specs false
+      g.mailer_specs false
+      g.model_specs false
+      g.observer_specs false
+      g.routing_specs false
+      g.view_specs false
+
+      g.factory_bot false
       g.integration_tool :rspec
       g.stylesheets false
       g.javascripts false
-      g.jbuilder true
+      g.jbuilder false
       g.helper false
     end
 
