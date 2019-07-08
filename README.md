@@ -10,4 +10,3 @@
 ## Libraries
 
 * [emirpasic/gods](https://github.com/emirpasic/gods) Implementation of various data structures and algorithms in Go
-* [nats](https://nats.io/)
