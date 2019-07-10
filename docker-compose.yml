@@ -1,18 +1,18 @@
 version: '3'
 
 services:
-  # db:
-  #   image: postgres
-  #   volumes:
-  #     - db_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432"
-  # redis:
-  #   image: redis:latest
-  #   volumes:
-  #     - redis_data:/data
-  #   ports:
-  #     - 6379:6379
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432"
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
 
   nats:
     image: nats:latest
@@ -26,6 +26,6 @@ services:
     ports:
       - "8200:8200"
 
-# volumes:
-  # db_data:
-  # redis_data:
+volumes:
+  db_data:
+  redis_data:
