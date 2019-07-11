@@ -17,9 +17,9 @@ type OrderSide struct {
 	priceTree *rbtx.RedBlackTreeExtended // 红黑树保存 价格 -> 订单列表/量和
 	prices    map[string]*OrderQueue     // 价格 -> 订单列表/量和
 
-	volume    decimal.Decimal
-	numOrders int
-	depth     int // 深度
+	volume    decimal.Decimal // 委托总量
+	numOrders int             // 订单数
+	depth     int             // 深度 一个价格算一个深度
 }
 
 func rbtComparator(a, b interface{}) int {

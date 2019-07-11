@@ -12,9 +12,9 @@ import (
 // OrderQueue stores and manage chain of orders
 // 某个价格订单列表 and 量总和
 type OrderQueue struct {
-	volume decimal.Decimal
-	price  decimal.Decimal
-	orders *list.List
+	volume decimal.Decimal // 总量
+	price  decimal.Decimal // 价格
+	orders *list.List      // 订单列表
 }
 
 // NewOrderQueue creates and initialize OrderQueue object

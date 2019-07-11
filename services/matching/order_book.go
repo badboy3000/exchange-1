@@ -25,12 +25,6 @@ func NewOrderBook() *OrderBook {
 	}
 }
 
-// PriceLevel contains price and volume in depth
-type PriceLevel struct {
-	Price    decimal.Decimal `json:"price"`
-	Quantity decimal.Decimal `json:"quantity"`
-}
-
 // ProcessMarketOrder immediately gets definite quantity from the order book with market price
 // Arguments:
 //      side     - what do you want to do (ob.Sell or ob.Buy)
@@ -168,6 +162,7 @@ func (ob *OrderBook) ProcessLimitOrder(side Side, orderID string, quantity, pric
 	return
 }
 
+// 按照最优价格处理订单
 func (ob *OrderBook) processQueue(bestPriceOrderQueue *OrderQueue, quantityToTrade decimal.Decimal) (done []*Order, partial *Order, partialQuantityProcessed, quantityLeft decimal.Decimal) {
 	quantityLeft = quantityToTrade
 
@@ -204,6 +199,11 @@ func (ob *OrderBook) Order(orderID string) *Order {
 }
 
 // Depth returns price levels and volume at price level
+// asks: 110 -> 5
+//       100 -> 1
+// --------------
+// bids: 90  -> 5
+//       80  -> 1
 func (ob *OrderBook) Depth() (asks, bids []*PriceLevel) {
 	level := ob.asks.MaxPriceQueue()
 	for level != nil {
@@ -241,7 +241,7 @@ func (ob *OrderBook) CancelOrder(orderID string) *Order {
 	return ob.asks.Remove(e)
 }
 
-// CalculateMarketPrice returns total market price for requested quantity
+// CalculateMarketPrice returns total market price for requested quantity 返回成交总价 也就是各个成交价格乘以量，最后求和
 // if err is not nil price returns total price of all levels in side
 func (ob *OrderBook) CalculateMarketPrice(side Side, quantity decimal.Decimal) (price decimal.Decimal, err error) {
 	price = decimal.Zero
