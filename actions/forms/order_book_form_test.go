@@ -5,6 +5,7 @@ import (
 
 	"github.com/FlowerWrong/exchange/models"
 	"github.com/devfeel/mapper"
+	"github.com/shopspring/decimal"
 )
 
 func TestOrderBookFormMapper(t *testing.T) {
@@ -12,8 +13,8 @@ func TestOrderBookFormMapper(t *testing.T) {
 		Symbol:    "BTC_USD",
 		OrderType: "limit",
 		Side:      "Buy",
-		Volume:    10.00,
-		Price:     100.00,
+		Volume:    decimal.NewFromFloat(10.00),
+		Price:     decimal.NewFromFloat(100.00),
 	}
 	ob := &models.OrderBook{}
 	mapper.AutoMapper(obf, ob)
