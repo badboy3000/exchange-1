@@ -7,8 +7,6 @@ type Order struct {
 	User         User
 	FundID       uint
 	Fund         Fund
-	OrderBookID  uint
-	OrderBook    OrderBook
 	Symbol       string
 	OrderType    string  // market or limit
 	Side         string  // sell or buy
