@@ -80,7 +80,7 @@ func TestLimitProcess(t *testing.T) {
 	}
 
 	t.Log("Done:", done)
-	if done[0].ID() != "order-b100" {
+	if done[0].ID() != "sell-100" {
 		t.Fatal("Wrong done id")
 	}
 
@@ -138,7 +138,7 @@ func TestLimitProcess(t *testing.T) {
 	}
 
 	t.Log("Done:", done)
-	if len(done) != 7 {
+	if len(done) != 6 {
 		t.Fatal("Wrong done quantity")
 	}
 

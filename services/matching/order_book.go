@@ -83,7 +83,7 @@ func (ob *OrderBook) ProcessMarketOrder(side Side, quantity decimal.Decimal) (do
 // Return:
 //      error   - not nil if quantity (or price) is less or equal 0. Or if order with given ID is exists
 //      done    - not nil if your order produces ends of anoter order, this order will add to
-//                the "done" slice. If your order have done too, it will be places to this array too
+//                the "done" slice.
 //      partial - not nil if your order has done but top order is not fully done. Or if your order is
 //                partial done and placed to the orderbook without full quantity - partial will contain
 //                your order with quantity to left
@@ -138,26 +138,15 @@ func (ob *OrderBook) ProcessLimitOrder(side Side, orderID string, quantity, pric
 	if quantityToTrade.Sign() > 0 {
 		// 未成交订单
 		o := NewOrder(orderID, side, quantityToTrade, price, time.Now().UTC())
+
+		// 部分成交
 		if len(done) > 0 {
 			partialQuantityProcessed = quantity.Sub(quantityToTrade) // 已成交量
 			partial = o
 		}
 		ob.orders[orderID] = sideToAdd.Append(o)
 	} else {
-		totalQuantity := decimal.Zero
-		totalPrice := decimal.Zero
-
-		for _, order := range done {
-			totalQuantity = totalQuantity.Add(order.Quantity())
-			totalPrice = totalPrice.Add(order.Price().Mul(order.Quantity()))
-		}
-
-		if partialQuantityProcessed.Sign() > 0 {
-			totalQuantity = totalQuantity.Add(partialQuantityProcessed)
-			totalPrice = totalPrice.Add(partial.Price().Mul(partialQuantityProcessed))
-		}
-
-		done = append(done, NewOrder(orderID, side, quantity, totalPrice.Div(totalQuantity), time.Now().UTC()))
+		// 完全成交
 	}
 	return
 }
@@ -176,7 +165,8 @@ func (ob *OrderBook) processQueue(bestPriceOrderQueue *OrderQueue, quantityToTra
 		if quantityLeft.LessThan(headOrder.Quantity()) {
 			// 剩余委单
 			partial = NewOrder(headOrder.ID(), headOrder.Side(), headOrder.Quantity().Sub(quantityLeft), headOrder.Price(), headOrder.Time())
-			partialQuantityProcessed = quantityLeft // 已成交部分量
+			done = append(done, NewOrder(headOrder.ID(), headOrder.Side(), quantityLeft, headOrder.Price(), headOrder.Time())) // 成交单列表
+			partialQuantityProcessed = quantityLeft                                                                            // 已成交部分量
 			bestPriceOrderQueue.Update(headOrderEl, partial)
 			quantityLeft = decimal.Zero // 未成交剩余单量
 		} else {

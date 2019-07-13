@@ -29,8 +29,26 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	orderBook := matching.NewOrderBook()
-	addDepth(orderBook, "05-", decimal.New(10, 0))
-	addDepth(orderBook, "10-", decimal.New(10, 0))
-	addDepth(orderBook, "15-", decimal.New(10, 0))
+	addDepth(orderBook, "", decimal.New(2, 0))
 	fmt.Println(orderBook)
+	log.Println(orderBook.ProcessLimitOrder(matching.Buy, "order-b100", decimal.New(1, 0), decimal.New(100, 0)))
+
+	// done, partial, partialQty, _ := orderBook.ProcessLimitOrder(matching.Buy, fmt.Sprintf("%sbuy-%d", "80", 80), decimal.New(1, 0), decimal.New(80, 0))
+	// log.Println(done, partial, partialQty)
+
+	// done, partial, partialQty, _ = orderBook.ProcessLimitOrder(matching.Buy, fmt.Sprintf("%sbuy-%d", "90", 90), decimal.New(5, 0), decimal.New(90, 0))
+	// log.Println(done, partial, partialQty)
+
+	// done, partial, partialQty, _ = orderBook.ProcessLimitOrder(matching.Sell, fmt.Sprintf("%sbuy-%d", "100", 100), decimal.New(1, 0), decimal.New(100, 0))
+	// log.Println(done, partial, partialQty)
+
+	// done, partial, partialQty, _ = orderBook.ProcessLimitOrder(matching.Sell, fmt.Sprintf("%sbuy-%d", "110", 110), decimal.New(5, 0), decimal.New(110, 0))
+	// log.Println(done, partial, partialQty)
+
+	// log.Println(orderBook.ProcessMarketOrder(matching.Buy, decimal.New(10, 0)))
+	fmt.Println(orderBook)
+
+	// done, partial, partialQty, _ = orderBook.ProcessLimitOrder(matching.Buy, "uinqueID", decimal.New(3, 0), decimal.New(120, 0))
+	// log.Println(done, partial, partialQty)
+	// fmt.Println(orderBook)
 }

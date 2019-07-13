@@ -1,12 +1,8 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 // Withdraw ...
 type Withdraw struct {
-	gorm.Model
+	BaseModel
 	AccountID  uint
 	Account    Account
 	CurrencyID uint

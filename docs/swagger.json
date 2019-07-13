@@ -60,13 +60,13 @@
                 "summary": "new an order book",
                 "parameters": [
                     {
-                        "description": "order book model",
+                        "description": "order book form",
                         "name": "req",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/models.OrderBook"
+                            "$ref": "#/definitions/forms.OrderBookForm"
                         }
                     }
                 ],
@@ -75,7 +75,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/models.OrderBook"
+                            "$ref": "#/definitions/dtos.OrderBookDTO"
                         }
                     }
                 }
@@ -151,13 +151,73 @@
         }
     },
     "definitions": {
+        "dtos.OrderBookDTO": {
+            "type": "object",
+            "properties": {
+                "fund_id": {
+                    "type": "integer"
+                },
+                "order_type": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "side": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "symbol": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "volume": {
+                    "type": "number"
+                }
+            }
+        },
+        "forms.OrderBookForm": {
+            "type": "object",
+            "properties": {
+                "order_type": {
+                    "description": "market or limit",
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "side": {
+                    "description": "sell or buy",
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                },
+                "volume": {
+                    "type": "number"
+                }
+            }
+        },
         "models.Currency": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "deposit_fee": {
                     "type": "number"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "symbol": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 },
                 "withdraw_fee": {
@@ -168,6 +228,12 @@
         "models.Fund": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
                 "leftCurrency": {
                     "type": "object",
                     "$ref": "#/definitions/models.Currency"
@@ -194,17 +260,26 @@
                 "symbol": {
                     "description": "eg btc_usd eth_usd",
                     "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
         "models.OrderBook": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "fund": {
                     "type": "object",
                     "$ref": "#/definitions/models.Fund"
                 },
                 "fund_id": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 },
                 "order_type": {
@@ -215,10 +290,17 @@
                     "type": "number"
                 },
                 "side": {
-                    "description": "Sell Buy",
+                    "description": "sell or buy",
                     "type": "string"
                 },
+                "status": {
+                    "description": "pending done cancel reject",
+                    "type": "integer"
+                },
                 "symbol": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 },
                 "user": {
@@ -239,13 +321,22 @@
                 "address": {
                     "type": "string"
                 },
+                "created_at": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }

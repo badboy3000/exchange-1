@@ -1,10 +1,8 @@
 package models
 
-import "github.com/jinzhu/gorm"
-
 // Deposit ...
 type Deposit struct {
-	gorm.Model
+	BaseModel
 	AccountID  uint
 	Account    Account
 	CurrencyID uint

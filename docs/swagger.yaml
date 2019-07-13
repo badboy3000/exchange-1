@@ -1,16 +1,60 @@
 basePath: '{{.BasePath}}'
 definitions:
+  dtos.OrderBookDTO:
+    properties:
+      fund_id:
+        type: integer
+      order_type:
+        type: string
+      price:
+        type: number
+      side:
+        type: string
+      status:
+        type: integer
+      symbol:
+        type: string
+      user_id:
+        type: integer
+      volume:
+        type: number
+    type: object
+  forms.OrderBookForm:
+    properties:
+      order_type:
+        description: market or limit
+        type: string
+      price:
+        type: number
+      side:
+        description: sell or buy
+        type: string
+      symbol:
+        type: string
+      volume:
+        type: number
+    type: object
   models.Currency:
     properties:
+      created_at:
+        type: string
       deposit_fee:
         type: number
+      id:
+        type: integer
       symbol:
+        type: string
+      updated_at:
         type: string
       withdraw_fee:
         type: number
     type: object
   models.Fund:
     properties:
+      created_at:
+        type: string
+      id:
+        type: integer
       leftCurrency:
         $ref: '#/definitions/models.Currency'
         type: object
@@ -30,13 +74,19 @@ definitions:
       symbol:
         description: eg btc_usd eth_usd
         type: string
+      updated_at:
+        type: string
     type: object
   models.OrderBook:
     properties:
+      created_at:
+        type: string
       fund:
         $ref: '#/definitions/models.Fund'
         type: object
       fund_id:
+        type: integer
+      id:
         type: integer
       order_type:
         description: market or limit
@@ -44,9 +94,14 @@ definitions:
       price:
         type: number
       side:
-        description: Sell Buy
+        description: sell or buy
         type: string
+      status:
+        description: pending done cancel reject
+        type: integer
       symbol:
+        type: string
+      updated_at:
         type: string
       user:
         $ref: '#/definitions/models.User'
@@ -60,11 +115,17 @@ definitions:
     properties:
       address:
         type: string
+      created_at:
+        type: string
       email:
         type: string
+      id:
+        type: integer
       name:
         type: string
       role:
+        type: string
+      updated_at:
         type: string
     type: object
   utils.APIRes:
@@ -114,12 +175,12 @@ paths:
       - application/json
       description: create an order book
       parameters:
-      - description: order book model
+      - description: order book form
         in: body
         name: req
         required: true
         schema:
-          $ref: '#/definitions/models.OrderBook'
+          $ref: '#/definitions/forms.OrderBookForm'
           type: object
       produces:
       - application/json
@@ -127,7 +188,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.OrderBook'
+            $ref: '#/definitions/dtos.OrderBookDTO'
             type: object
       summary: new an order book
   /order_books/{id}:

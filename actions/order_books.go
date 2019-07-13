@@ -4,10 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/FlowerWrong/exchange/dtos"
+
+	"github.com/FlowerWrong/exchange/actions/forms"
 	"github.com/FlowerWrong/exchange/db"
 	"github.com/FlowerWrong/exchange/models"
 	"github.com/FlowerWrong/exchange/services"
 	"github.com/FlowerWrong/exchange/utils"
+	"github.com/devfeel/mapper"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,15 +42,17 @@ func OrderBookIndex(c *gin.Context) {
 // @Description create an order book
 // @Accept json
 // @Produce json
-// @Param req body models.OrderBook true "order book model"
-// @Success 200 {object} models.OrderBook
+// @Param req body forms.OrderBookForm true "order book form"
+// @Success 200 {object} dtos.OrderBookDTO
 // @Router /order_books [post]
 func OrderBookCreate(c *gin.Context) {
-	var orderBook models.OrderBook
-	if err := c.ShouldBindJSON(&orderBook); err != nil {
+	var orderBookForm forms.OrderBookForm
+	if err := c.ShouldBindJSON(&orderBookForm); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	orderBook := &models.OrderBook{}
+	mapper.AutoMapper(&orderBookForm, orderBook)
 	orderBook.UserID = 1 // FIXME
 
 	// 相同品种，相同价格得单不合并
@@ -69,7 +75,9 @@ func OrderBookCreate(c *gin.Context) {
 	}
 	db.Redis().RPush("trades_queue", string(data))
 
-	c.JSON(http.StatusOK, orderBook)
+	orderBookDTO := &dtos.OrderBookDTO{}
+	mapper.AutoMapper(orderBook, orderBookDTO)
+	c.JSON(http.StatusOK, orderBookDTO)
 }
 
 // OrderBookUpdate ...

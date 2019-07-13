@@ -66,8 +66,9 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
     t.integer "user_id", null: false, comment: "用户"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
     t.integer "fund_id", null: false, comment: "商品"
+    t.integer "status", default: 0, null: false, comment: "状态"
     t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
-    t.string "side", null: false, comment: "Sell or Buy"
+    t.string "side", null: false, comment: "sell or buy"
     t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
     t.decimal "price", precision: 32, scale: 16, default: "0.0", comment: "价格"
     t.datetime "deleted_at", comment: "删除时间"
@@ -81,16 +82,18 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
     t.integer "user_id", null: false, comment: "用户"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
     t.integer "fund_id", null: false, comment: "商品"
+    t.integer "order_book_id", null: false, comment: "关联下单记录"
     t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
-    t.string "side", null: false, comment: "Sell or Buy"
+    t.string "side", null: false, comment: "sell or buy"
     t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
     t.decimal "price", precision: 32, scale: 16, default: "0.0", comment: "价格"
     t.datetime "deleted_at", comment: "删除时间"
-    t.float "ask_fee", comment: "卖单手续费"
-    t.float "bid_fee", comment: "买单手续费"
+    t.decimal "ask_fee", precision: 32, scale: 16, default: "0.0", comment: "卖单手续费"
+    t.decimal "bid_fee", precision: 32, scale: 16, default: "0.0", comment: "买单手续费"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["fund_id"], name: "index_orders_on_fund_id"
+    t.index ["order_book_id"], name: "index_orders_on_order_book_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 

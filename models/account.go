@@ -1,12 +1,8 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 // Account ...
 type Account struct {
-	gorm.Model
+	BaseModel
 	UserID     uint
 	User       User
 	CurrencyID uint
