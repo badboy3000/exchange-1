@@ -87,9 +87,10 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
     t.string "side", null: false, comment: "sell or buy"
     t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
     t.decimal "price", precision: 32, scale: 16, default: "0.0", comment: "价格"
-    t.datetime "deleted_at", comment: "删除时间"
+    t.decimal "average_price", precision: 32, scale: 16, default: "0.0", comment: "开单均价"
     t.decimal "ask_fee", precision: 32, scale: 16, default: "0.0", comment: "卖单手续费"
     t.decimal "bid_fee", precision: 32, scale: 16, default: "0.0", comment: "买单手续费"
+    t.datetime "deleted_at", comment: "删除时间"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["fund_id"], name: "index_orders_on_fund_id"

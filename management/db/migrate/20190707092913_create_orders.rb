@@ -9,9 +9,10 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.string :side, null: false, comment: 'sell or buy'
       t.decimal :volume, default: 0, precision: 32, scale: 16, comment: '量'
       t.decimal :price, default: 0, precision: 32, scale: 16, comment: '价格'
-      t.datetime :deleted_at, comment: '删除时间'
+      t.decimal :average_price, default: 0, precision: 32, scale: 16, comment: '开单均价'
       t.decimal :ask_fee, default: 0, precision: 32, scale: 16, comment: '卖单手续费'
       t.decimal :bid_fee, default: 0, precision: 32, scale: 16, comment: '买单手续费'
+      t.datetime :deleted_at, comment: '删除时间'
 
       t.timestamps
     end
