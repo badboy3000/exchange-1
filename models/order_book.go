@@ -3,10 +3,10 @@ package models
 // OrderBook ...
 type OrderBook struct {
 	BaseModel
-	UserID    uint `json:"user_id"`
+	UserID    uint64 `json:"user_id"`
 	User      User
 	Symbol    string `json:"symbol"`
-	FundID    uint   `json:"fund_id"`
+	FundID    uint64 `json:"fund_id"`
 	Fund      Fund
 	Status    uint    `json:"status"`     // pending done cancel reject
 	OrderType string  `json:"order_type"` // market or limit

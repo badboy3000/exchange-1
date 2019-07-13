@@ -3,9 +3,9 @@ package models
 // Order ...
 type Order struct {
 	BaseModel
-	UserID       uint
+	UserID       uint64
 	User         User
-	FundID       uint
+	FundID       uint64
 	Fund         Fund
 	Symbol       string
 	OrderType    string  // market or limit
