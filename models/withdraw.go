@@ -1,5 +1,7 @@
 package models
 
+import "github.com/shopspring/decimal"
+
 // Withdraw ...
 type Withdraw struct {
 	BaseModel
@@ -7,6 +9,6 @@ type Withdraw struct {
 	Account    Account
 	CurrencyID uint64
 	Currency   Currency
-	Amount     float64 `json:"amount" sql:"DECIMAL(32,16)"`
-	Fee        float64 `json:"fee" sql:"DECIMAL(32,16)"`
+	Amount     decimal.Decimal `json:"amount" sql:"DECIMAL(32,16)"`
+	Fee        decimal.Decimal `json:"fee" sql:"DECIMAL(32,16)"`
 }

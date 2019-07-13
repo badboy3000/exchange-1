@@ -1,5 +1,7 @@
 package models
 
+import "github.com/shopspring/decimal"
+
 // Account ...
 type Account struct {
 	BaseModel
@@ -7,6 +9,6 @@ type Account struct {
 	User       User
 	CurrencyID uint64
 	Currency   Currency
-	Balance    float64 `json:"balance" sql:"DECIMAL(32,16)"`
-	Locked     float64 `json:"locked" sql:"DECIMAL(32,16)"`
+	Balance    decimal.Decimal `json:"balance" sql:"DECIMAL(32,16)"`
+	Locked     decimal.Decimal `json:"locked" sql:"DECIMAL(32,16)"`
 }

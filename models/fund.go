@@ -1,5 +1,7 @@
 package models
 
+import "github.com/shopspring/decimal"
+
 // Fund ...
 type Fund struct {
 	BaseModel
@@ -9,6 +11,6 @@ type Fund struct {
 	RightCurrencyID uint64
 	LeftCurrency    Currency `gorm:"foreignkey:LeftCurrencyID"`
 	LeftCurrencyID  uint64
-	LimitRate       float64 `json:"limit_rate" sql:"DECIMAL(32,16)"`
-	MarketRate      float64 `json:"market_rate" sql:"DECIMAL(32,16)"`
+	LimitRate       decimal.Decimal `json:"limit_rate" sql:"DECIMAL(32,16)"`
+	MarketRate      decimal.Decimal `json:"market_rate" sql:"DECIMAL(32,16)"`
 }
