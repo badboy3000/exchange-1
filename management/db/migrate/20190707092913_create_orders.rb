@@ -4,6 +4,8 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.integer :user_id, null: false, comment: '用户'
       t.string :symbol, null: false, comment: '简称 eg BTC_USD'
       t.integer :fund_id, null: false, comment: '商品'
+      t.integer :other_side_order_book_id, null: false, comment: '对方订单簿'
+      t.integer :other_side_trading_record_id, null: false, comment: '对方成交记录'
       t.string :order_type, null: false, comment: '订单类型 市价单market 限价单limit'
       t.string :side, null: false, comment: 'sell or buy'
       t.decimal :volume, default: 0, precision: 32, scale: 16, comment: '量'

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"gopkg.in/resty.v1"
 
 	_ "./docs"
 )
@@ -23,6 +24,10 @@ import (
 
 // @host localhost:8080
 func main() {
+	resty.SetDebug(false)
+	resty.SetRESTMode()
+	resty.SetHeader("Accept", "application/json")
+
 	router := gin.Default()
 	router.GET("/orders", actions.OrderIndex)
 	router.GET("/order_books", actions.OrderBookIndex)

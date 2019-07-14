@@ -3,6 +3,7 @@ package actions
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/FlowerWrong/exchange/dtos"
 
@@ -60,7 +61,15 @@ func OrderBookCreate(c *gin.Context) {
 	var fund models.Fund
 	db.ORM().Where("symbol = ?", orderBook.Symbol).First(&fund)
 	orderBook.FundID = fund.ID
-	db.ORM().Create(&orderBook)
+	orderBook.CreatedAt = time.Now()
+	orderBook.UpdatedAt = time.Now()
+
+	id, err := utils.NextID()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	orderBook.ID = id
 
 	// 发送给queue
 	b, err := json.Marshal(orderBook)

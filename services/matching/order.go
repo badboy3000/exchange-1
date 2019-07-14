@@ -3,6 +3,7 @@ package matching
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -31,6 +32,15 @@ func NewOrder(orderID string, side Side, quantity, price decimal.Decimal, timest
 // ID returns orderID field copy
 func (o *Order) ID() string {
 	return o.id
+}
+
+// IntID returns orderID field uint64
+func (o *Order) IntID() uint64 {
+	id, err := strconv.ParseUint(o.ID(), 10, 64)
+	if err != nil {
+		panic(err)
+	}
+	return id
 }
 
 // Side returns side of the order

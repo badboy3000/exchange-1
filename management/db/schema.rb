@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_13_040614) do
+ActiveRecord::Schema.define(version: 2019_07_07_093935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,8 @@ ActiveRecord::Schema.define(version: 2019_07_13_040614) do
     t.integer "user_id", null: false, comment: "用户"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
     t.integer "fund_id", null: false, comment: "商品"
+    t.integer "other_side_order_book_id", null: false, comment: "对方订单簿"
+    t.integer "other_side_trading_record_id", null: false, comment: "对方成交记录"
     t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
     t.string "side", null: false, comment: "sell or buy"
     t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
@@ -94,27 +96,6 @@ ActiveRecord::Schema.define(version: 2019_07_13_040614) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["fund_id"], name: "index_orders_on_fund_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
-  end
-
-  create_table "trading_records", comment: "成交记录", force: :cascade do |t|
-    t.integer "user_id", null: false, comment: "用户"
-    t.string "symbol", null: false, comment: "简称 eg BTC_USD"
-    t.integer "fund_id", null: false, comment: "商品"
-    t.integer "order_book_id", null: false, comment: "关联下单记录"
-    t.integer "order_id", null: false, comment: "所属订单"
-    t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
-    t.string "side", null: false, comment: "sell or buy"
-    t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
-    t.decimal "price", precision: 32, scale: 16, default: "0.0", comment: "价格"
-    t.decimal "ask_fee", precision: 32, scale: 16, default: "0.0", comment: "卖单手续费"
-    t.decimal "bid_fee", precision: 32, scale: 16, default: "0.0", comment: "买单手续费"
-    t.datetime "deleted_at", comment: "删除时间"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["fund_id"], name: "index_trading_records_on_fund_id"
-    t.index ["order_book_id"], name: "index_trading_records_on_order_book_id"
-    t.index ["order_id"], name: "index_trading_records_on_order_id"
-    t.index ["user_id"], name: "index_trading_records_on_user_id"
   end
 
   create_table "users", comment: "用户", force: :cascade do |t|

@@ -4,17 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
+	"runtime"
 	"time"
 
 	"github.com/FlowerWrong/exchange/db"
 	"github.com/FlowerWrong/exchange/models"
 	"github.com/FlowerWrong/exchange/services"
+	"github.com/FlowerWrong/exchange/services/matching"
 )
 
 // QueueName ...
 const QueueName = "trades_queue"
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	matchEngine := matching.NewOrderBook()
 	for {
 		if db.Redis().Exists(QueueName).Val() > 0 {
 			if db.Redis().LLen(QueueName).Val() > 0 {
@@ -36,6 +44,26 @@ func main() {
 						panic(err)
 					}
 					log.Println(orderBook)
+
+					side := matching.Buy
+					if orderBook.Side == "sell" {
+						side = matching.Sell
+					}
+					if orderBook.OrderType == "limit" {
+						done, partial, partialQty, err := matchEngine.ProcessLimitOrder(side, orderBook.StrID(), orderBook.Volume, orderBook.Price)
+						if err != nil {
+							panic(err)
+						}
+						log.Println(done, partial, partialQty)
+						models.Transaction(&orderBook, done)
+					} else if orderBook.OrderType == "market" {
+						done, partial, partialQty, left, err := matchEngine.ProcessMarketOrder(side, orderBook.Volume)
+						if err != nil {
+							panic(err)
+						}
+						log.Println(done, partial, partialQty, left)
+						models.Transaction(&orderBook, done)
+					}
 				case "update_order_book":
 					var orderBook models.OrderBook
 					err = json.Unmarshal(event.Data, &orderBook)
