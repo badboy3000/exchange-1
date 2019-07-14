@@ -11,11 +11,11 @@ import (
 // OrderBook ...
 type OrderBook struct {
 	BaseModel
-	UserID    uint64 `json:"user_id"`
-	User      User
-	Symbol    string `json:"symbol"`
-	FundID    uint64 `json:"fund_id"`
-	Fund      Fund
+	UserID    uint64          `json:"user_id"`
+	User      User            `json:"-"`
+	Symbol    string          `json:"symbol"`
+	FundID    uint64          `json:"fund_id"`
+	Fund      Fund            `json:"-"`
 	Status    uint            `json:"status"`     // pending done cancel reject
 	OrderType string          `json:"order_type"` // market or limit
 	Side      string          `json:"side"`       // sell or buy
@@ -46,6 +46,20 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 	}()
 
 	tx.Create(orderBook)
+
+	// 账户余额锁定
+	account := &Account{}
+	fund := &Fund{}
+	tx.First(fund, orderBook.FundID)
+	if orderBook.Side == "buy" {
+		// BTC_USD 为例，购买动作即用USD买BTC，锁定账户的USD
+		FindAccountByUserIDAndCurrencyID(tx, account, orderBook.UserID, fund.RightCurrencyID)
+	} else {
+		FindAccountByUserIDAndCurrencyID(tx, account, orderBook.UserID, fund.LeftCurrencyID)
+	}
+	account.Lock(orderBook.Volume)
+	tx.Save(account)
+
 	for _, matchingOrderDone := range done {
 		id := matchingOrderDone.IntID()
 
@@ -70,6 +84,9 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 		orderOther.Price = matchingOrderDone.Price()
 		tx.Create(orderOther)
 
+		// 账户结算
+		Settlement(orderOther, tx)
+
 		// 当前用户记录
 		orderBook.Volume = orderBook.Volume.Sub(matchingOrderDone.Quantity())
 		if orderBook.Volume.Sign() == 0 {
@@ -83,7 +100,7 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 		order.UserID = orderBook.UserID
 		order.FundID = orderBook.FundID
 		order.OtherSideOrderBookID = orderBookDone.ID
-		order.OtherSideTradingRecordID = orderOther.ID
+		order.OtherSideOrderID = orderOther.ID
 		order.Symbol = orderBook.Symbol
 		order.OrderType = orderBook.OrderType
 		order.Side = orderBook.Side
@@ -91,8 +108,11 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 		order.Price = matchingOrderDone.Price()
 		tx.Create(order)
 
+		// 账户结算
+		Settlement(order, tx)
+
 		orderOther.OtherSideOrderBookID = orderBook.ID
-		orderOther.OtherSideTradingRecordID = order.ID
+		orderOther.OtherSideOrderID = order.ID
 		tx.Save(orderOther)
 	}
 

@@ -16,10 +16,11 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   enable_extension "plpgsql"
 
   create_table "accounts", comment: "币种账户", force: :cascade do |t|
-    t.integer "user_id", null: false, comment: "用户"
-    t.integer "currency_id", null: false, comment: "币种"
+    t.bigint "user_id", null: false, comment: "用户"
+    t.bigint "currency_id", null: false, comment: "币种"
     t.decimal "balance", precision: 32, scale: 16, default: "0.0", comment: "余额"
     t.decimal "locked", precision: 32, scale: 16, default: "0.0", comment: "锁定金额"
+    t.datetime "deleted_at", comment: "删除时间"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["currency_id"], name: "index_accounts_on_currency_id"
@@ -37,10 +38,11 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   end
 
   create_table "deposits", comment: "存款记录", force: :cascade do |t|
-    t.integer "account_id", null: false, comment: "账户"
-    t.integer "currency_id", null: false, comment: "币种"
+    t.bigint "account_id", null: false, comment: "账户"
+    t.bigint "currency_id", null: false, comment: "币种"
     t.decimal "amount", precision: 32, scale: 16, default: "0.0", comment: "金额"
     t.decimal "fee", precision: 32, scale: 16, default: "0.0", comment: "手续费"
+    t.datetime "deleted_at", comment: "删除时间"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account_id"], name: "index_deposits_on_account_id"
@@ -50,8 +52,8 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   create_table "funds", comment: "商品", force: :cascade do |t|
     t.string "name", null: false, comment: "名称"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
-    t.integer "right_currency_id", null: false, comment: "币种 eg BTC"
-    t.integer "left_currency_id", null: false, comment: "币种 eg USD"
+    t.bigint "right_currency_id", null: false, comment: "币种 eg BTC"
+    t.bigint "left_currency_id", null: false, comment: "币种 eg USD"
     t.decimal "limit_rate", precision: 32, scale: 16, default: "0.0", comment: "限价单利率"
     t.decimal "market_rate", precision: 32, scale: 16, default: "0.0", comment: "市价单利率"
     t.datetime "deleted_at", comment: "删除时间"
@@ -63,9 +65,9 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   end
 
   create_table "order_books", comment: "下单记录 包括ask and bid", force: :cascade do |t|
-    t.integer "user_id", null: false, comment: "用户"
+    t.bigint "user_id", null: false, comment: "用户"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
-    t.integer "fund_id", null: false, comment: "商品"
+    t.bigint "fund_id", null: false, comment: "商品"
     t.integer "status", default: 0, null: false, comment: "状态"
     t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
     t.string "side", null: false, comment: "sell or buy"
@@ -79,11 +81,12 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   end
 
   create_table "orders", comment: "订单", force: :cascade do |t|
-    t.integer "user_id", null: false, comment: "用户"
+    t.bigint "user_id", null: false, comment: "用户"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
-    t.integer "fund_id", null: false, comment: "商品"
-    t.integer "other_side_order_book_id", null: false, comment: "对方订单簿"
-    t.integer "other_side_trading_record_id", null: false, comment: "对方成交记录"
+    t.bigint "fund_id", null: false, comment: "商品"
+    t.bigint "order_book_id", null: false, comment: "委托单"
+    t.bigint "other_side_order_book_id", null: false, comment: "对方订单簿"
+    t.bigint "other_side_order_id", null: false, comment: "对方成交记录"
     t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
     t.string "side", null: false, comment: "sell or buy"
     t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
@@ -111,10 +114,11 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   end
 
   create_table "withdraws", comment: "提现记录", force: :cascade do |t|
-    t.integer "account_id", null: false, comment: "账户"
-    t.integer "currency_id", null: false, comment: "币种"
+    t.bigint "account_id", null: false, comment: "账户"
+    t.bigint "currency_id", null: false, comment: "币种"
     t.decimal "amount", precision: 32, scale: 16, default: "0.0", comment: "金额"
     t.decimal "fee", precision: 32, scale: 16, default: "0.0", comment: "手续费"
+    t.datetime "deleted_at", comment: "删除时间"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account_id"], name: "index_withdraws_on_account_id"

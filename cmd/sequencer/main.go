@@ -43,8 +43,10 @@ func main() {
 					if err != nil {
 						panic(err)
 					}
-					log.Println(orderBook)
 
+					log.Println("===========交易前==========")
+					log.Println(matchEngine)
+					log.Println("=====================")
 					side := matching.Buy
 					if orderBook.Side == "sell" {
 						side = matching.Sell
@@ -64,6 +66,10 @@ func main() {
 						log.Println(done, partial, partialQty, left)
 						models.Transaction(&orderBook, done)
 					}
+
+					log.Println("=====================")
+					log.Println(matchEngine)
+					log.Println("===========交易后==========")
 				case "update_order_book":
 					var orderBook models.OrderBook
 					err = json.Unmarshal(event.Data, &orderBook)

@@ -1,6 +1,8 @@
 package models
 
-import "github.com/shopspring/decimal"
+import (
+	"github.com/shopspring/decimal"
+)
 
 // Fund ...
 type Fund struct {
