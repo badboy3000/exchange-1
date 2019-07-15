@@ -1,6 +1,9 @@
 package models
 
-import "github.com/shopspring/decimal"
+import (
+	"github.com/FlowerWrong/exchange/db"
+	"github.com/shopspring/decimal"
+)
 
 // Order ...
 type Order struct {
@@ -21,4 +24,11 @@ type Order struct {
 	AveragePrice         decimal.Decimal `json:"average_price" sql:"DECIMAL(32,16)"`
 	AskFee               decimal.Decimal `json:"ask_fee" sql:"DECIMAL(32,16)"`
 	BidFee               decimal.Decimal `json:"bid_fee" sql:"DECIMAL(32,16)"`
+}
+
+// CurrentPrice 返回最新成交价
+func CurrentPrice(symbol string) decimal.Decimal {
+	var order Order
+	db.ORM().Where("symbol = ?", symbol).Last(&order)
+	return order.Price
 }

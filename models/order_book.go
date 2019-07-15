@@ -53,10 +53,17 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 	tx.First(fund, orderBook.FundID)
 	if orderBook.Side == "buy" {
 		// BTC_USD 为例，购买动作即用USD买BTC，锁定账户的USD
+		turnover := orderBook.Volume.Mul(orderBook.Price) // 单价 * 数量
 		FindAccountByUserIDAndCurrencyID(tx, account, orderBook.UserID, fund.RightCurrencyID)
-		account.Lock(orderBook.Volume.Mul(orderBook.Price)) // 单价 * 数量
+		if account.Balance.Sub(turnover).Sign() < 0 {
+			return ErrWithoutEnoughMoney // 钱不够
+		}
+		account.Lock(turnover)
 	} else {
 		FindAccountByUserIDAndCurrencyID(tx, account, orderBook.UserID, fund.LeftCurrencyID)
+		if account.Balance.Sub(orderBook.Volume).Sign() < 0 {
+			return ErrWithoutEnoughMoney
+		}
 		account.Lock(orderBook.Volume)
 	}
 	tx.Save(account)
