@@ -47,10 +47,7 @@ func main() {
 					log.Println("===========交易前==========")
 					log.Println(matchEngine)
 					log.Println("=====================")
-					side := matching.Buy
-					if orderBook.Side == "sell" {
-						side = matching.Sell
-					}
+					side := matching.Str2Side(orderBook.Side)
 					if orderBook.OrderType == "limit" {
 						done, partial, partialQty, err := matchEngine.ProcessLimitOrder(side, orderBook.StrID(), orderBook.Volume, orderBook.Price)
 						if err != nil {

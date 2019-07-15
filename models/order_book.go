@@ -54,10 +54,11 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 	if orderBook.Side == "buy" {
 		// BTC_USD 为例，购买动作即用USD买BTC，锁定账户的USD
 		FindAccountByUserIDAndCurrencyID(tx, account, orderBook.UserID, fund.RightCurrencyID)
+		account.Lock(orderBook.Volume.Mul(orderBook.Price)) // 单价 * 数量
 	} else {
 		FindAccountByUserIDAndCurrencyID(tx, account, orderBook.UserID, fund.LeftCurrencyID)
+		account.Lock(orderBook.Volume)
 	}
-	account.Lock(orderBook.Volume)
 	tx.Save(account)
 
 	for _, matchingOrderDone := range done {

@@ -23,6 +23,14 @@ func (s Side) String() string {
 	return "sell"
 }
 
+// Str2Side ...
+func Str2Side(strSide string) Side {
+	if strSide == "buy" {
+		return Buy
+	}
+	return Sell
+}
+
 // MarshalJSON implements json.Marshaler interface
 func (s Side) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + s.String() + `"`), nil
