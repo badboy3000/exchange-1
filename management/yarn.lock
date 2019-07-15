@@ -3640,6 +3640,11 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
+jquery@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
+  integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
+
 js-base64@^2.1.8:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.1.tgz#1efa39ef2c5f7980bb1784ade4a8af2de3291121"
@@ -3777,6 +3782,11 @@ lcid@^2.0.0:
   integrity sha512-avPEb8P8EGnwXKClwsNUgryVjllcRqtMYa49NTsbQagYuT1DcXnl1915oxWjoyGrXR6zH/Y0Zc96xWsPcoDKeA==
   dependencies:
     invert-kv "^2.0.0"
+
+lightweight-charts@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/lightweight-charts/-/lightweight-charts-1.0.1.tgz#2e1fbebbaf6f4d2b4492670a14f5512b8ea15953"
+  integrity sha512-iGHJAsEhD91siAmmN08ujt4Q7s6f4qcUvnTbbuizFC7zjBS0fsu6S8/nT3YLciD2k3VB6YACJn09mQIFUEId1g==
 
 load-json-file@^1.0.0:
   version "1.1.0"

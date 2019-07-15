@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/FlowerWrong/exchange/dtos"
-
 	"github.com/FlowerWrong/exchange/actions/forms"
 	"github.com/FlowerWrong/exchange/db"
+	"github.com/FlowerWrong/exchange/dtos"
 	"github.com/FlowerWrong/exchange/models"
 	"github.com/FlowerWrong/exchange/services"
 	"github.com/FlowerWrong/exchange/utils"
@@ -22,7 +21,7 @@ import (
 // @Description get your order book list
 // @Accept json
 // @Produce json
-// @Param symbol query string true "eg BTC_USD"
+// @Param symbol query string "eg BTC_USD"
 // @Success 200 {array} models.OrderBook
 // @Router /order_books?symbol={symbol} [get]
 func OrderBookIndex(c *gin.Context) {
