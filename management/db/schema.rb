@@ -81,24 +81,24 @@ ActiveRecord::Schema.define(version: 2019_07_07_093935) do
   end
 
   create_table "orders", comment: "订单", force: :cascade do |t|
-    t.bigint "user_id", null: false, comment: "用户"
+    t.bigint "bid_user_id", null: false, comment: "买方"
+    t.bigint "ask_user_id", null: false, comment: "卖方"
     t.string "symbol", null: false, comment: "简称 eg BTC_USD"
     t.bigint "fund_id", null: false, comment: "商品"
-    t.bigint "order_book_id", null: false, comment: "委托单"
-    t.bigint "other_side_order_book_id", null: false, comment: "对方订单簿"
-    t.bigint "other_side_order_id", null: false, comment: "对方成交记录"
-    t.string "order_type", null: false, comment: "订单类型 市价单market 限价单limit"
-    t.string "side", null: false, comment: "sell or buy"
+    t.bigint "bid_order_book_id", null: false, comment: "买方委托单"
+    t.bigint "ask_order_book_id", null: false, comment: "卖方委托单"
     t.decimal "volume", precision: 32, scale: 16, default: "0.0", comment: "量"
     t.decimal "price", precision: 32, scale: 16, default: "0.0", comment: "价格"
-    t.decimal "average_price", precision: 32, scale: 16, default: "0.0", comment: "开单均价"
     t.decimal "ask_fee", precision: 32, scale: 16, default: "0.0", comment: "卖单手续费"
     t.decimal "bid_fee", precision: 32, scale: 16, default: "0.0", comment: "买单手续费"
     t.datetime "deleted_at", comment: "删除时间"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["ask_order_book_id"], name: "index_orders_on_ask_order_book_id"
+    t.index ["ask_user_id"], name: "index_orders_on_ask_user_id"
+    t.index ["bid_order_book_id"], name: "index_orders_on_bid_order_book_id"
+    t.index ["bid_user_id"], name: "index_orders_on_bid_user_id"
     t.index ["fund_id"], name: "index_orders_on_fund_id"
-    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "users", comment: "用户", force: :cascade do |t|

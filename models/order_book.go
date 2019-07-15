@@ -80,21 +80,6 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 		}
 		tx.Save(orderBookDone)
 
-		// 保存交易记录
-		orderOther := &Order{}
-		orderOther.OrderBookID = id
-		orderOther.UserID = orderBookDone.UserID
-		orderOther.FundID = orderBookDone.FundID
-		orderOther.Symbol = orderBookDone.Symbol
-		orderOther.OrderType = orderBookDone.OrderType
-		orderOther.Side = orderBookDone.Side
-		orderOther.Volume = matchingOrderDone.Quantity()
-		orderOther.Price = matchingOrderDone.Price()
-		tx.Create(orderOther)
-
-		// 账户结算
-		Settlement(orderOther, tx)
-
 		// 当前用户记录
 		orderBook.Volume = orderBook.Volume.Sub(matchingOrderDone.Quantity())
 		if orderBook.Volume.Sign() == 0 {
@@ -104,24 +89,25 @@ func Transaction(orderBook *OrderBook, done []*matching.Order) error {
 
 		// 保存交易记录
 		order := &Order{}
-		order.OrderBookID = orderBook.ID
-		order.UserID = orderBook.UserID
+		if orderBook.Side == "buy" {
+			order.BidUserID = orderBook.UserID
+			order.AskUserID = orderBookDone.UserID
+			order.BidOrderBookID = orderBook.ID
+			order.AskOrderBookID = id
+		} else {
+			order.BidUserID = orderBookDone.UserID
+			order.AskUserID = orderBook.UserID
+			order.BidOrderBookID = id
+			order.AskOrderBookID = orderBook.ID
+		}
 		order.FundID = orderBook.FundID
-		order.OtherSideOrderBookID = orderBookDone.ID
-		order.OtherSideOrderID = orderOther.ID
 		order.Symbol = orderBook.Symbol
-		order.OrderType = orderBook.OrderType
-		order.Side = orderBook.Side
 		order.Volume = matchingOrderDone.Quantity()
 		order.Price = matchingOrderDone.Price()
 		tx.Create(order)
 
 		// 账户结算
 		Settlement(order, tx)
-
-		orderOther.OtherSideOrderBookID = orderBook.ID
-		orderOther.OtherSideOrderID = order.ID
-		tx.Save(orderOther)
 	}
 
 	if orderBook.OrderType == "market" {

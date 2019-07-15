@@ -37,30 +37,30 @@ func Settlement(order *Order, tx *gorm.DB) {
 	fund := &Fund{}
 	tx.First(fund, order.FundID)
 	turnover := order.Volume.Mul(order.Price)
-	if order.Side == "buy" {
-		// BTC_USD 为例，购买动作即用USD买BTC
-
+	// BTC_USD 为例，购买动作即用USD买BTC
+	{
 		// USD减少
 		accountRight := &Account{}
-		FindAccountByUserIDAndCurrencyID(tx, accountRight, order.UserID, fund.RightCurrencyID)
+		FindAccountByUserIDAndCurrencyID(tx, accountRight, order.BidUserID, fund.RightCurrencyID)
 		accountRight.UnLock(turnover)
 		tx.Save(accountRight)
 
 		// BTC增加
 		accountLeft := &Account{}
-		FindAccountByUserIDAndCurrencyID(tx, accountLeft, order.UserID, fund.LeftCurrencyID)
+		FindAccountByUserIDAndCurrencyID(tx, accountLeft, order.BidUserID, fund.LeftCurrencyID)
 		accountLeft.Balance = accountLeft.Balance.Add(order.Volume)
 		tx.Save(accountLeft)
-	} else {
+	}
+	{
 		// USD增加
 		accountLeft := &Account{}
-		FindAccountByUserIDAndCurrencyID(tx, accountLeft, order.UserID, fund.LeftCurrencyID)
+		FindAccountByUserIDAndCurrencyID(tx, accountLeft, order.AskUserID, fund.LeftCurrencyID)
 		accountLeft.UnLock(turnover)
 		tx.Save(accountLeft)
 
 		// BTC减少
 		accountRight := &Account{}
-		FindAccountByUserIDAndCurrencyID(tx, accountRight, order.UserID, fund.RightCurrencyID)
+		FindAccountByUserIDAndCurrencyID(tx, accountRight, order.AskUserID, fund.RightCurrencyID)
 		accountRight.Balance = accountRight.Balance.Add(order.Volume)
 		tx.Save(accountRight)
 	}
