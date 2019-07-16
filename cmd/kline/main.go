@@ -6,8 +6,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/FlowerWrong/exchange/db"
-	"github.com/FlowerWrong/exchange/models"
+	"github.com/FlowerWrong/exchange/services/kline"
 )
 
 // @doc https://github.com/beimingio/peatio/blob/master/lib/daemons/k.rb
@@ -16,14 +15,16 @@ func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	for {
-		var funds []models.Fund
-		db.ORM().Find(&funds)
+	log.Println(kline.K1("btc_usdt", time.Now().Add(-10*time.Minute)))
 
-		for _, fund := range funds {
-			log.Println(fund)
-		}
+	// for {
+	// 	var funds []models.Fund
+	// 	db.ORM().Find(&funds)
 
-		time.Sleep(time.Duration(10) * time.Second)
-	}
+	// 	for _, fund := range funds {
+	// 		log.Println(fund)
+	// 	}
+
+	// 	time.Sleep(time.Duration(10) * time.Second)
+	// }
 }

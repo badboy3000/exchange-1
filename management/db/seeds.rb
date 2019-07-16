@@ -23,6 +23,23 @@ Huobi.new.symbols['data'].each do |s|
   )
 end
 
+btc_usdt = Fund.where(symbol: 'btc_usdt').last
+Huobi.new.history_trade('btcusdt', 2000)['data'].each do |row|
+  row['data'].each do |t|
+    Order.create!(
+      bid_user_id: 1,
+      ask_user_id: 1,
+      symbol: btc_usdt&.symbol,
+      fund_id: btc_usdt&.id,
+      bid_order_book_id: 1,
+      ask_order_book_id: 1,
+      volume: t['amount'],
+      price: t['price'],
+      created_at: DateTime.strptime((t['ts']).to_s, '%Q')
+    )
+  end
+end
+
 user = User.new(
   name: 'yang',
   password: '111111',
