@@ -46,6 +46,12 @@ func main() {
 
 					log.Println("===========交易前==========")
 					log.Println(matchEngine)
+					// backup order book depth to redis
+					obJSON, err := matchEngine.MarshalJSON()
+					if err != nil {
+						panic(err)
+					}
+					db.Redis().Set("matching_order_book", string(obJSON), 0)
 					log.Println("=====================")
 					side := matching.Str2Side(orderBook.Side)
 					if orderBook.OrderType == "limit" {
