@@ -1,19 +1,23 @@
+# frozen_string_literal: true
 
-%w[BTC ETH LTC XRP BCH EOS DASH TRX ONT IOST IOTA USD USDT].each do |s|
+huobi = Huobi.new
+huobi.currencys['data'].each do |s|
   Currency.create!(
     symbol: s,
     deposit_fee: 0.0001,
-    withdraw_fee: 0.0001,
+    withdraw_fee: 0.0001
   )
 end
 
-usd_currency = Currency.where(symbol: 'USD').first
-Currency.first(11).each do |c|
+Huobi.new.symbols['data'].each do |s|
+  base_currency = s['base-currency']
+  quote_currency = s['quote-currency']
+  symbol = "#{base_currency}_#{quote_currency}"
   Fund.create!(
-    name: "#{c.symbol}_USD",
-    symbol: "#{c.symbol}_USD",
-    left_currency_id: c.id,
-    right_currency_id: usd_currency.id,
+    name: symbol,
+    symbol: symbol,
+    left_currency_id: Currency.where(symbol: base_currency).last&.id,
+    right_currency_id: Currency.where(symbol: quote_currency).last&.id,
     limit_rate: 0.0001,
     market_rate: 0.0002
   )
