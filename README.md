@@ -1,9 +1,5 @@
 # crypto currency exchange
 
-## Generate doc
-
-`swag init`
-
 ## Features
 
 * [ ] SMS and Google Two-Factor authenticaton

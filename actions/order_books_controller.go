@@ -16,14 +16,6 @@ import (
 )
 
 // OrderBookIndex ...
-//
-// @Summary order book list
-// @Description get your order book list
-// @Accept json
-// @Produce json
-// @Param symbol query string "eg BTC_USD"
-// @Success 200 {array} models.OrderBook
-// @Router /order_books?symbol={symbol} [get]
 func OrderBookIndex(c *gin.Context) {
 	symbol := c.DefaultQuery("symbol", "all")
 	var orderBooks []models.OrderBook
@@ -37,14 +29,6 @@ func OrderBookIndex(c *gin.Context) {
 }
 
 // OrderBookCreate ...
-//
-// @Summary new an order book
-// @Description create an order book
-// @Accept json
-// @Produce json
-// @Param req body forms.OrderBookForm true "order book form"
-// @Success 200 {object} dtos.OrderBookDTO
-// @Router /order_books [post]
 func OrderBookCreate(c *gin.Context) {
 	var orderBookForm forms.OrderBookForm
 	if err := c.ShouldBindJSON(&orderBookForm); err != nil {
@@ -109,15 +93,6 @@ func OrderBookCreate(c *gin.Context) {
 }
 
 // OrderBookUpdate ...
-//
-// @Summary update an order book
-// @Description update an exist order book
-// @Accept json
-// @Produce json
-// @Param id path integer true "eg 1"
-// @Param req body models.OrderBook true "order book model"
-// @Success 200 {object} models.OrderBook
-// @Router /order_books/{id} [put]
 func OrderBookUpdate(c *gin.Context) {
 	id := c.Param("id")
 	var orderBookUpdate models.OrderBook
@@ -139,14 +114,6 @@ func OrderBookUpdate(c *gin.Context) {
 }
 
 // OrderBookCancel ...
-//
-// @Summary cancel an order book
-// @Description cancel an exist order book
-// @Accept json
-// @Produce json
-// @Param id path integer true "eg 1"
-// @Success 200 {object} utils.APIRes
-// @Router /order_books/{id} [delete]
 func OrderBookCancel(c *gin.Context) {
 	id := c.Param("id")
 	// do not update here
