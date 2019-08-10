@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 
 func initORM() error {
 	var err error
-	orm, err = gorm.Open("postgres", "host=127.0.0.1 port=5432 user=kingyang dbname=exchange_development sslmode=disable")
+	orm, err = gorm.Open("mysql", "root:@/exchange_development?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		return err
 	}
