@@ -2,11 +2,12 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: mysql
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/mysql
     ports:
-      - "5432"
+      - 3306:3306
+
   redis:
     image: redis:latest
     volumes:
