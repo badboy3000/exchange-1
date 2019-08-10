@@ -7,8 +7,9 @@
 * [ ] High performance matching-engine
 * [ ] 使用redis的list来作为时序queue
 * [ ] 更新的订单重新入matching-engine
-* [ ] 使用[nats queue group](https://nats-io.github.io/docs/developer/concepts/queue.html)来作为消息系统，保证消息只处理一次，但可以部署多个subscriber
+* [ ] 使用[rabbitmq work queue](https://www.rabbitmq.com/tutorials/tutorial-two-ruby.html)来作为消息系统，保证消息只处理一次，但可以部署多个subscriber
 * [ ] 合约支持
+* [ ] 单线程财务系统
 
 ## Libraries
 

@@ -5,6 +5,8 @@ services:
     image: mysql
     volumes:
       - db_data:/var/lib/mysql
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: changeme
     ports:
       - 3306:3306
 
@@ -15,17 +17,23 @@ services:
     ports:
       - 6379:6379
 
-  nats:
-    image: nats:latest
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      - "4222:4222"
-      - "6222:6222"
-      - "8222:8222"
+      - "5672:5672"
+      - "15672:15672"
 
   vault:
     image: vault:latest
     ports:
       - "8200:8200"
+    environment:
+      SKIP_SETCAP: 1
+      VAULT_TOKEN: changeme
+      VAULT_DEV_ROOT_TOKEN_ID: changeme
 
 volumes:
   db_data:
