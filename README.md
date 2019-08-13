@@ -1,15 +1,20 @@
 # crypto currency exchange
 
+## Requirements
+
+* [go](https://golang.org/)
+* [ruby 2.6+](https://www.ruby-lang.org/en/)
+* [rails 6+](https://rubyonrails.org/)
+* [mysql 8+](https://www.mysql.com/cn/)
+* [redis 5+](https://redis.io/)
+* [rabbitmq 3.7+](https://www.rabbitmq.com/)
+* [docker](https://www.docker.com/)
+
 ## Features
 
 * [ ] SMS and Google Two-Factor authenticaton
 * [ ] KYC Verification
 * [ ] High performance matching-engine
-* [ ] 使用redis的list来作为时序queue
-* [ ] 更新的订单重新入matching-engine
-* [ ] 使用[rabbitmq work queue](https://www.rabbitmq.com/tutorials/tutorial-two-ruby.html)来作为消息系统，保证消息只处理一次，但可以部署多个subscriber
-* [ ] 合约支持
-* [ ] 单线程财务系统
 
 ## Libraries
 
