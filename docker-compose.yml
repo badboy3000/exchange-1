@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: mysql
+    image: mysql:latest
     volumes:
       - db_data:/var/lib/mysql
     # environment:
@@ -23,13 +23,13 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 5672:5672
+      - 15672:15672
 
   vault:
     image: vault:latest
     ports:
-      - "8200:8200"
+      - 8200:8200
     environment:
       SKIP_SETCAP: 1
       VAULT_TOKEN: changeme

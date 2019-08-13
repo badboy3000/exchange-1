@@ -11,7 +11,7 @@ var (
 	rabbitmqOnce   sync.Once
 )
 
-// @doc https://www.rabbitmq.com/tutorials/tutorial-one-go.html
+// @doc https://www.rabbitmq.com/tutorials/tutorial-two-go.html
 func initRabbitmqClient() error {
 	var err error
 	rabbitmqClient, err = amqp.Dial("amqp://guest:guest@localhost:5672/")
