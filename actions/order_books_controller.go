@@ -13,6 +13,7 @@ import (
 	"github.com/FlowerWrong/exchange/utils"
 	"github.com/devfeel/mapper"
 	"github.com/gin-gonic/gin"
+	"github.com/streadway/amqp"
 )
 
 // OrderBookIndex ...
@@ -85,7 +86,17 @@ func OrderBookCreate(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	db.Redis().RPush("trades_queue", string(data))
+
+	db.RabbitmqChannel().Publish(
+		"",                             // exchange
+		"exchange.matching.work.queue", // routing key
+		false,                          // mandatory
+		false,                          // immediate
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			ContentType:  "text/plain",
+			Body:         data,
+		})
 
 	orderBookDTO := &dtos.OrderBookDTO{}
 	mapper.AutoMapper(orderBook, orderBookDTO)

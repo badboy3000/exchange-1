@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/FlowerWrong/exchange/actions"
+	"github.com/FlowerWrong/exchange/db"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/resty.v1"
 )
@@ -23,6 +24,10 @@ func main() {
 			"message": "pong",
 		})
 	})
+
+	// rabbitmq
+	db.RabbitmqChannel()
+	db.DeclareMatchingWorkQueue()
 
 	router.Run(":8080")
 }
